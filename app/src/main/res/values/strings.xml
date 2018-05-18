@@ -1,3 +1,61 @@
 <resources>
-    <string name="app_name">TennisCoach</string>
+    <string name="app_name" translatable="false">Tennis Coach</string>
+    <string name="app_full_name" translatable="false">Redbridge\nTennis Club</string>
+
+    <!--Activity Titles-->
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_home">Bookings</string>
+
+    <!--Action Menu-->
+    <string name="action_logout">Logout</string>
+
+    <!--Image View Content Description-->
+    <string name="image_description_profile_pic">Profile Picture</string>
+
+    <!--Text-->
+    <string name="text_login">Login</string>
+    <string name="text_register">Register</string>
+    <string name="text_account">Account</string>
+    <string name="text_login_other">Sign in with</string>
+    <string name="text_register_other">Sign up with</string>
+    <string name="text_facebook" translatable="false">Facebook</string>
+    <string name="text_google" translatable="false">Google</string>
+    <string name="text_forgot_password">Forgot password?</string>
+    <string name="text_sign_up">Or sign up</string>
+    <string name="text_sign_in">Or sign in</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_confirm_password">Confirm Password</string>
+    <string name="text_new_password">New Password</string>
+    <string name="text_current_password">Current Password</string>
+    <string name="text_name">Name</string>
+    <string name="text_phone">Mobile Phone Number</string>
+    <string name="text_reset_sent">Password reset email sent</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_reset">Reset</string>
+    <string name="text_reset_password">Reset password</string>
+    <string name="text_update">Update</string>
+    <string name="text_private_session">Private Session</string>
+    <string name="text_normal_session">Normal Session</string>
+    <string name="text_group_session">Group Session</string>
+
+    <!--Error Messages-->
+    <string name="error_email">Enter a valid email address (email@domain.co.uk)</string>
+    <string name="error_password">Enter a password (a least 8 character including uppercase, lowercase and numeric characters)</string>
+    <string name="error_password_empty">Enter a password</string>
+    <string name="error_confirm_password">Passwords do not match</string>
+    <string name="error_name">Enter a valid name (John Doe)</string>
+    <string name="error_phone">Enter a valid UK mobile phone number (07912346578)</string>
+    <string name="error_user_does_not_exist">User does not exist</string>
+    <string name="error_password_incorrect">Password is incorrect</string>
+
+    <!--Tab Headers-->
+    <string name="tab_bookings_previous">Previous</string>
+    <string name="tab_bookings_upcoming">Upcoming</string>
+
+    <!--Navigation Drawer-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>

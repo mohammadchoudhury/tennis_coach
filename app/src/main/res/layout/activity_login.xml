@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/layout_padding">
+
+        <LinearLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:src="@mipmap/ic_launcher"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/text_vertical_padding"
+                android:gravity="center"
+                android:text="@string/text_login"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textSize="36sp"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etl_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_email">
+
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_email_black_24dp"
+                    android:drawablePadding="@dimen/drawable_horizontal_padding"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="@dimen/drawable_horizontal_padding"
+                    android:paddingRight="@dimen/drawable_horizontal_padding"
+                    android:text="tennistitansfairlop@gmail.com"
+                    android:enabled="false" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etl_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_password">
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_lock_black_24dp"
+                    android:drawablePadding="@dimen/drawable_horizontal_padding"
+                    android:inputType="textPassword"
+                    android:paddingLeft="@dimen/drawable_horizontal_padding"
+                    android:paddingRight="@dimen/drawable_horizontal_padding" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_default"
+                android:text="@string/text_login" />
+
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
