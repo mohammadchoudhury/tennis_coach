@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity
         navMenu.findItem(R.id.nav_settings).setEnabled(false);
         navMenu.findItem(R.id.nav_account).setEnabled(false);
         navMenu.findItem(R.id.nav_logout).setEnabled(false);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
     }
 
     @Override
