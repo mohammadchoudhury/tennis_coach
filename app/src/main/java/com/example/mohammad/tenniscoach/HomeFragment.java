@@ -79,12 +79,15 @@ public class HomeFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+            if (position == 0) {
+
+            }
             return new BookingTabFragment().newInstance(position);
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
     }
 
