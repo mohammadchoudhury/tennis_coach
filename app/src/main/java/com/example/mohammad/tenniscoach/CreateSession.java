@@ -158,11 +158,11 @@ public class CreateSession extends AppCompatActivity {
                     } else if (mOptions.get(2).equals("Choose a session type")) {
                         msg = "You must choose a session type";
                     } else {
-                        CollectionReference cities = fsdb.collection("sessions");
+                        CollectionReference sessionsRef = fsdb.collection("sessions");
                         Map<String, Object> session = new HashMap<>();
                         session.put("date", mCalendar.getTime());
                         session.put("type", mOptions.get(2));
-                        cities.add(session);
+                        sessionsRef.add(session);
                         while (mOptions.size() > 1) mOptions.remove(1);
                         mOptions.add("Choose a time");
                         mOptionsAdapter.notifyDataSetChanged();
