@@ -39,6 +39,7 @@
     <string name="text_private_session">Private Session</string>
     <string name="text_normal_session">Normal Session</string>
     <string name="text_group_session">Group Session</string>
+    <string name="text_create_session">Create Session</string>
 
     <!--Error Messages-->
     <string name="error_email">Enter a valid email address (email@domain.co.uk)</string>
