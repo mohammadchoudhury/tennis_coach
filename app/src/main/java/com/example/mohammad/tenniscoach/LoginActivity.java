@@ -83,6 +83,16 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (null != currentUser) {
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
+    }
+
     private boolean isValidForm() {
         boolean valid = true;
         String password = mPasswordEditText.getText().toString();
