@@ -55,6 +55,7 @@
     <!--Tab Headers-->
     <string name="tab_bookings_previous">Previous</string>
     <string name="tab_bookings_upcoming">Upcoming</string>
+    <string name="tab_active_sessions">Sessions</string>
 
     <!--Navigation Drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

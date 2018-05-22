@@ -20,6 +20,12 @@
                 android:layout_height="wrap_content">
 
                 <android.support.design.widget.TabItem
+                    android:id="@+id/tab_active_sessions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_active_sessions" />
+
+                <android.support.design.widget.TabItem
                     android:id="@+id/tab_booking_upcoming"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -7,16 +7,40 @@ import java.util.Locale;
 
 public class Session {
 
-    private Date date;
+    private String ID;
     private String type;
+    private Date date;
 
-    public Session(){}
+    public Session() {
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public String getDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
+        return sdf.format(date);
+    }
+
+    public String getTimeString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
+        return sdf.format(date);
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDateString(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.UK);
         Date d = new Date();
         try {

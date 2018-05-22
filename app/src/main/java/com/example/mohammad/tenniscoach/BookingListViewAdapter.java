@@ -8,29 +8,31 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mohammad.tenniscoach.model.Session;
+
 import java.util.List;
 
 public class BookingListViewAdapter extends BaseAdapter {
 
-    List<String> bookings;
+    List<Session> sessions;
 
-    BookingListViewAdapter(List<String> bookings) {
-        this.bookings = bookings;
+    BookingListViewAdapter(List<Session> sessions) {
+        this.sessions = sessions;
     }
 
     @Override
     public int getCount() {
-        return bookings.size();
+        return sessions.size();
     }
 
     @Override
-    public String getItem(int position) {
-        return bookings.get(position);
+    public Session getItem(int position) {
+        return sessions.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return bookings.get(position).hashCode();
+        return sessions.get(position).hashCode();
     }
 
     @Override
@@ -38,22 +40,21 @@ public class BookingListViewAdapter extends BaseAdapter {
         if (listItemView == null) {
             listItemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_booking, parent, false);
         }
-        final String[] booking = getItem(position).split("\\|");
-        ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText(booking[0]);
-        ((TextView) listItemView.findViewById(R.id.tv_item_session_type)).setText(booking[1]);
-        ((TextView) listItemView.findViewById(R.id.tv_item_date)).setText(booking[2]);
-        ((TextView) listItemView.findViewById(R.id.tv_item_time)).setText(booking[3]);
+
+        Session session = sessions.get(position);
         ImageView sessionImage = listItemView.findViewById(R.id.iv_session_icon);
-        switch (booking[1]) {
-            case "Normal Session":
-                sessionImage.setImageResource(R.drawable.ic_court);
+        switch (session.getType()) {
+            case "Private":
+                sessionImage.setImageResource(R.drawable.ic_racket);
                 break;
-            case "Group Session":
+            case "Group":
                 sessionImage.setImageResource(R.drawable.ic_balls);
                 break;
-            default:
-                sessionImage.setImageResource(R.drawable.ic_racket);
         }
+        ((TextView) listItemView.findViewById(R.id.tv_item_session_type)).setText(session.getType() + " Session");
+        ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText("Court 5");
+        ((TextView) listItemView.findViewById(R.id.tv_item_date)).setText(session.getDateString());
+        ((TextView) listItemView.findViewById(R.id.tv_item_time)).setText(session.getTimeString());
         return listItemView;
     }
 
