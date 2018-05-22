@@ -4,8 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -21,9 +21,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -122,13 +124,28 @@ public class CreateSession extends AppCompatActivity {
                         fsdb.collection("sessions")
                                 .whereGreaterThanOrEqualTo("date", mCalendar.getTime())
                                 .whereLessThan("date", nDate)
-                                .get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                .get()
+//                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                        bookings.clear();
+//                                        mTimesTaken = new ArrayList<>();
+//                                        for (QueryDocumentSnapshot document : task.getResult()) {
+//                                            Map session = document.getData();
+//                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
+//                                            String time = sdf.format(session.get("date"));
+//                                            mTimesTaken.add(time);
+//                                            bookings.add(session.get("type") + " session at " + time);
+//                                        }
+//                                        bookingAdapter.notifyDataSetChanged();
+//                                    }
+//                                });
+                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                                         bookings.clear();
                                         mTimesTaken = new ArrayList<>();
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                             Map session = document.getData();
                                             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
                                             String time = sdf.format(session.get("date"));
@@ -147,7 +164,28 @@ public class CreateSession extends AppCompatActivity {
             rootView.findViewById(R.id.btn_create_session).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    String msg = "";
+                    if (mOptions.get(0).equals("Choose a date")) {
+                        msg = "You must choose a date";
+                    } else if (mOptions.get(1).equals("Choose a time")) {
+                        msg = "You must choose a time";
+                    } else if (!mCalendar.after(Calendar.getInstance())) {
+                        msg = "Session must be in the future";
+                    } else if (mOptions.get(2).equals("Choose a session type")) {
+                        msg = "You must choose a session type";
+                    } else {
+                        CollectionReference cities = fsdb.collection("sessions");
+                        Map<String, Object> session = new HashMap<>();
+                        session.put("date", mCalendar.getTime());
+                        session.put("type", mOptions.get(2));
+                        cities.add(session);
+                        while (mOptions.size() > 1) mOptions.remove(1);
+                        mOptions.add("Choose a time");
+                        mOptionsAdapter.notifyDataSetChanged();
+                        bookingAdapter.notifyDataSetChanged();
+                        msg = "Successfully created new session";
+                    }
+                    Snackbar.make(rootView, msg, Snackbar.LENGTH_SHORT).show();
                 }
             });
 
