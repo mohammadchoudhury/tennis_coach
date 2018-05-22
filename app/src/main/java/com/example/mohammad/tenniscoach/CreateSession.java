@@ -124,22 +124,6 @@ public class CreateSession extends AppCompatActivity {
                         fsdb.collection("sessions")
                                 .whereGreaterThanOrEqualTo("date", mCalendar.getTime())
                                 .whereLessThan("date", nDate)
-//                                .get()
-//                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                        bookings.clear();
-//                                        mTimesTaken = new ArrayList<>();
-//                                        for (QueryDocumentSnapshot document : task.getResult()) {
-//                                            Map session = document.getData();
-//                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
-//                                            String time = sdf.format(session.get("date"));
-//                                            mTimesTaken.add(time);
-//                                            bookings.add(session.get("type") + " session at " + time);
-//                                        }
-//                                        bookingAdapter.notifyDataSetChanged();
-//                                    }
-//                                });
                                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
                                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
