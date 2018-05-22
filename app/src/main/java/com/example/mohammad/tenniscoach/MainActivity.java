@@ -59,19 +59,7 @@ public class MainActivity extends AppCompatActivity
         };
 
         FirebaseUser user = mAuth.getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        DocumentReference userRef = db.collection("coach").document(user.getUid());
-        userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot != null && documentSnapshot.exists()) {
-                    User user = documentSnapshot.toObject(User.class);
-                    ((TextView) findViewById(R.id.nav_tv_name)).setText(user.getName());
-                    ((TextView) findViewById(R.id.nav_tv_email)).setText(user.getEmail());
-                }
-            }
-        });
+        FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -91,6 +79,18 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
+
+        DocumentReference userRef = fsdb.collection("coach").document(user.getUid());
+        userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    User user = documentSnapshot.toObject(User.class);
+                    ((TextView) findViewById(R.id.nav_tv_name)).setText(user.getName());
+                    ((TextView) findViewById(R.id.nav_tv_email)).setText(user.getEmail());
+                }
+            }
+        });
     }
 
 

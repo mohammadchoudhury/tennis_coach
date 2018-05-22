@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -20,9 +21,19 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class CreateSession extends AppCompatActivity {
@@ -49,19 +60,29 @@ public class CreateSession extends AppCompatActivity {
         static ArrayList<String> mOptions;
         static ArrayAdapter mOptionsAdapter;
 
+        static ArrayList<String> mTimesTaken;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_create_session, container, false);
+
+            final FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
 
             mOptions = new ArrayList<>();
             mOptions.add("Choose a date");
 
             mCalendar = Calendar.getInstance();
 
+
+            ListView lvBookings = rootView.findViewById(R.id.lv_existing_bookings);
+            final ArrayList<String> bookings = new ArrayList<>();
+            final ArrayAdapter bookingAdapter = new ArrayAdapter(getContext(), R.layout.list_item_centred, bookings);
+            lvBookings.setAdapter(bookingAdapter);
+
             mOptionsAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, mOptions);
-            ListView lv = rootView.findViewById(R.id.lv_booking_options);
-            lv.setAdapter(mOptionsAdapter);
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            ListView lvOptions = rootView.findViewById(R.id.lv_booking_options);
+            lvOptions.setAdapter(mOptionsAdapter);
+            lvOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     switch (position) {
@@ -91,8 +112,44 @@ public class CreateSession extends AppCompatActivity {
                             + mCalendar.get(Calendar.YEAR);
                     mOptions.set(0, dateString);
                     mOptionsAdapter.notifyDataSetChanged();
+
+                    bookings.clear();
+                    bookingAdapter.notifyDataSetChanged();
+
+                    Date nDate = mCalendar.getTime();
+                    nDate.setTime(mCalendar.getTimeInMillis() + 86400000);
+                    if (!mOptions.get(0).equals("")) {
+                        fsdb.collection("sessions")
+                                .whereGreaterThanOrEqualTo("date", mCalendar.getTime())
+                                .whereLessThan("date", nDate)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        bookings.clear();
+                                        mTimesTaken = new ArrayList<>();
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Map session = document.getData();
+                                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
+                                            String time = sdf.format(session.get("date"));
+                                            mTimesTaken.add(time);
+                                            bookings.add(session.get("type") + " session at " + time);
+                                        }
+                                        bookingAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                    }
                 }
             };
+
+            ListView lvSession = rootView.findViewById(R.id.lv_existing_bookings);
+
+            rootView.findViewById(R.id.btn_create_session).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
             return rootView;
         }
@@ -117,7 +174,10 @@ public class CreateSession extends AppCompatActivity {
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
-                final String[] times = {"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
+                String[] timings = {"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
+                ArrayList<String> timingsAL = new ArrayList<String>(Arrays.asList(timings));
+                timingsAL.removeAll(mTimesTaken);
+                final ArrayList<String> times = timingsAL;
                 ListAdapter timesAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, times);
                 View title = View.inflate(getContext(), R.layout.dialog_title, null);
                 ((TextView) title.findViewById(R.id.title)).setText("Choose a time");
@@ -125,10 +185,10 @@ public class CreateSession extends AppCompatActivity {
                         .setAdapter(timesAdapter, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                int hourOfDay = Integer.parseInt(times[which].split(":")[0]);
+                                int hourOfDay = Integer.parseInt(times.get(which).split(":")[0]);
                                 mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                 mCalendar.set(Calendar.MINUTE, 0);
-                                mOptions.set(1, times[which]);
+                                mOptions.set(1, times.get(which));
                                 while (mOptions.size() > 2) mOptions.remove(2);
                                 mOptions.add("Choose a session type");
                                 mOptionsAdapter.notifyDataSetChanged();
