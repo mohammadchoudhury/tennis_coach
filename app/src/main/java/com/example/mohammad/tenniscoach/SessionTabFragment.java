@@ -40,8 +40,6 @@ public class SessionTabFragment extends Fragment {
         sessionsListView.setAdapter(sessionsAdapter);
         sessionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                Toast.makeText(parent.getContext(), sessions.get(position).getID(), Toast.LENGTH_LONG).show();
-
                 String sessionId = sessions.get(position).getID();
                 Intent intent = new Intent(getContext(), ViewSessionActivity.class)
                         .putExtra("sessionId", sessionId);
