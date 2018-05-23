@@ -3,6 +3,7 @@ package com.example.mohammad.tenniscoach;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -77,10 +79,11 @@ public class SessionActivity extends AppCompatActivity {
             mCalendar = Calendar.getInstance();
 
 
-            ListView lvBookings = rootView.findViewById(R.id.lv_existing_bookings);
-            final ArrayList<String> bookings = new ArrayList<>();
-            final ArrayAdapter bookingAdapter = new ArrayAdapter(getContext(), R.layout.list_item_centred, bookings);
-            lvBookings.setAdapter(bookingAdapter);
+            final ListView lvSessions = rootView.findViewById(R.id.lv_existing_bookings);
+            final ArrayList<String> sessionIds = new ArrayList<>();
+            final ArrayList<String> sessions = new ArrayList<>();
+            final ArrayAdapter bookingAdapter = new ArrayAdapter(getContext(), R.layout.list_item_centred, sessions);
+            lvSessions.setAdapter(bookingAdapter);
 
             mOptionsAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, mOptions);
             ListView lvOptions = rootView.findViewById(R.id.lv_booking_options);
@@ -116,7 +119,7 @@ public class SessionActivity extends AppCompatActivity {
                     mOptions.set(0, dateString);
                     mOptionsAdapter.notifyDataSetChanged();
 
-                    bookings.clear();
+                    sessions.clear();
                     bookingAdapter.notifyDataSetChanged();
 
                     Date nDate = mCalendar.getTime();
@@ -128,14 +131,25 @@ public class SessionActivity extends AppCompatActivity {
                                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
                                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                        bookings.clear();
+                                        sessions.clear();
+                                        sessionIds.clear();
                                         mTimesTaken = new ArrayList<>();
                                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                             Map session = document.getData();
                                             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
                                             String time = sdf.format(session.get("date"));
                                             mTimesTaken.add(time);
-                                            bookings.add(session.get("type") + " session at " + time);
+                                            sessionIds.add(document.getId());
+                                            sessions.add(session.get("type") + " session at " + time);
+                                            lvSessions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    String sessionId = sessionIds.get(position);
+                                                    Intent intent = new Intent(getContext(), ViewSessionActivity.class)
+                                                            .putExtra("sessionId", sessionId);
+                                                    startActivity(intent);
+                                                }
+                                            });
                                         }
                                         bookingAdapter.notifyDataSetChanged();
                                     }
@@ -143,8 +157,6 @@ public class SessionActivity extends AppCompatActivity {
                     }
                 }
             };
-
-            ListView lvSession = rootView.findViewById(R.id.lv_existing_bookings);
 
             rootView.findViewById(R.id.btn_create_session).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,6 +171,8 @@ public class SessionActivity extends AppCompatActivity {
                         msg = "Session must be in the future";
                     } else if (mOptions.get(2).equals("Choose a session type")) {
                         msg = "You must choose a session type";
+                    } else if (((EditText) rootView.findViewById(R.id.et_price)).getText().toString().equals("")) {
+                        msg = "You must set a price";
                     } else {
                         valid = true;
                     }
@@ -169,7 +183,9 @@ public class SessionActivity extends AppCompatActivity {
                         Map<String, Object> session = new HashMap<>();
                         session.put("date", mCalendar.getTime());
                         session.put("type", mOptions.get(2));
+                        session.put("price", Double.parseDouble(((EditText) rootView.findViewById(R.id.et_price)).getText().toString()));
                         sessionsRef.add(session);
+                        rootView.findViewById(R.id.et_price).setVisibility(View.INVISIBLE);
                         while (mOptions.size() > 1) mOptions.remove(1);
                         mOptions.add("Choose a time");
                         mOptionsAdapter.notifyDataSetChanged();
@@ -245,6 +261,10 @@ public class SessionActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 mOptions.set(2, sessionTypes[which]);
                                 mOptionsAdapter.notifyDataSetChanged();
+                                EditText etPrice = getActivity().findViewById(R.id.et_price);
+                                etPrice.setVisibility(View.VISIBLE);
+                                if (which == 0) etPrice.setText("25.00");
+                                else etPrice.setText("10.00");
                             }
                         })
                         .setNegativeButton(R.string.text_cancel, null);
