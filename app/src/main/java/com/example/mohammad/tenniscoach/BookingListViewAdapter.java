@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mohammad.tenniscoach.model.Booking;
 import com.example.mohammad.tenniscoach.model.Session;
 
 import java.util.List;
@@ -43,18 +44,26 @@ public class BookingListViewAdapter extends BaseAdapter {
 
         Session session = sessions.get(position);
         ImageView sessionImage = listItemView.findViewById(R.id.iv_session_icon);
-        switch (session.getType()) {
-            case "Private":
-                sessionImage.setImageResource(R.drawable.ic_racket);
-                break;
-            case "Group":
-                sessionImage.setImageResource(R.drawable.ic_balls);
-                break;
+        String sessionType = "";
+        if (session.getType().equalsIgnoreCase("private")){
+            sessionImage.setImageResource(R.drawable.ic_racket);
+            sessionType = "Private Session";
+        } else if (session.getType().equalsIgnoreCase("group")){
+            sessionImage.setImageResource(R.drawable.ic_balls);
+            sessionType = "Group Session";
+        } else {
+            sessionImage.setImageResource(R.drawable.ic_court);
+            sessionType = "Court Booking";
         }
-        ((TextView) listItemView.findViewById(R.id.tv_item_session_type)).setText(session.getType() + " Session");
-        ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText("Court 5");
+        ((TextView) listItemView.findViewById(R.id.tv_item_session_type)).setText(sessionType);
         ((TextView) listItemView.findViewById(R.id.tv_item_date)).setText(session.getDateString());
         ((TextView) listItemView.findViewById(R.id.tv_item_time)).setText(session.getTimeString());
+        if (session instanceof Booking) {
+            ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText(((Booking) session).getLocation());
+        } else {
+            ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText("Court 5");
+        }
+
         return listItemView;
     }
 

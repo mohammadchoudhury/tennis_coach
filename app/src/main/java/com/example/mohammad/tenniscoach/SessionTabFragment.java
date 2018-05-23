@@ -39,9 +39,9 @@ public class SessionTabFragment extends Fragment {
 
         final List<Session> sessions = new ArrayList<>();
 
-        final BookingListViewAdapter bookingsAdapter = new BookingListViewAdapter(sessions);
+        final BookingListViewAdapter sessionsAdapter = new BookingListViewAdapter(sessions);
         ListView sessionsListView = (ListView) rootView.findViewById(R.id.lv_bookings);
-        sessionsListView.setAdapter(bookingsAdapter);
+        sessionsListView.setAdapter(sessionsAdapter);
         sessionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 Toast.makeText(parent.getContext(), sessions.get(position).getID(), Toast.LENGTH_LONG).show();
@@ -59,7 +59,7 @@ public class SessionTabFragment extends Fragment {
                             session.setID(document.getId());
                             sessions.add(session);
                         }
-                        bookingsAdapter.notifyDataSetChanged();
+                        sessionsAdapter.notifyDataSetChanged();
                     }
                 });
 
