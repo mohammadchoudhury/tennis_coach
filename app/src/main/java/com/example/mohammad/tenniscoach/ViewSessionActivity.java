@@ -3,8 +3,10 @@ package com.example.mohammad.tenniscoach;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mohammad.tenniscoach.model.Session;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,7 +22,7 @@ public class ViewSessionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_session);
 
         Intent intent = getIntent();
-        String sessionId = intent.getStringExtra("sessionId");
+        final String sessionId = intent.getStringExtra("sessionId");
 
         final FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
 
@@ -52,6 +54,20 @@ public class ViewSessionActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.btn_cancel_session).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fsdb.document("sessions/"+sessionId)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                onBackPressed();
+                                Toast.makeText(ViewSessionActivity.this, "Session deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
 
     }
 
