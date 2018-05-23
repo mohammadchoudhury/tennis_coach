@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -149,6 +150,7 @@ public class CreateSession extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     String msg = "";
+                    boolean valid = false;
                     if (mOptions.get(0).equals("Choose a date")) {
                         msg = "You must choose a date";
                     } else if (mOptions.get(1).equals("Choose a time")) {
@@ -158,6 +160,11 @@ public class CreateSession extends AppCompatActivity {
                     } else if (mOptions.get(2).equals("Choose a session type")) {
                         msg = "You must choose a session type";
                     } else {
+                        valid = true;
+                    }
+
+                    if (!valid) Snackbar.make(rootView, msg, Snackbar.LENGTH_SHORT).show();
+                    else {
                         CollectionReference sessionsRef = fsdb.collection("sessions");
                         Map<String, Object> session = new HashMap<>();
                         session.put("date", mCalendar.getTime());
@@ -168,8 +175,8 @@ public class CreateSession extends AppCompatActivity {
                         mOptionsAdapter.notifyDataSetChanged();
                         bookingAdapter.notifyDataSetChanged();
                         msg = "Successfully created new session";
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
                     }
-                    Snackbar.make(rootView, msg, Snackbar.LENGTH_SHORT).show();
                 }
             });
 
