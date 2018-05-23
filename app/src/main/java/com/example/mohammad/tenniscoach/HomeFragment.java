@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), CreateSession.class));
+                startActivity(new Intent(getActivity(), SessionActivity.class));
             }
         });
 

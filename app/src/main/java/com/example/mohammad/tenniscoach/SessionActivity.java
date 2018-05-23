@@ -39,7 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class CreateSession extends AppCompatActivity {
+public class SessionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

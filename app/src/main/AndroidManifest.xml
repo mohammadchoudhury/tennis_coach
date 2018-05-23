@@ -21,9 +21,9 @@
             android:screenOrientation="userPortrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CreateSession"
-            android:screenOrientation="userPortrait"
-            android:parentActivityName=".MainActivity"></activity>
+            android:name=".SessionActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="userPortrait" />
     </application>
 
 </manifest>
