@@ -9,6 +9,7 @@ public class Booking extends Session {
     private String location;
     private double price;
     private DocumentReference user;
+    public String coach;
 
     public Booking() {
     }
@@ -39,5 +40,13 @@ public class Booking extends Session {
 
     public void setUser(DocumentReference user) {
         this.user = user;
+    }
+
+    public String getCoach() {
+        return coach;
+    }
+
+    public void setCoach(String coach) {
+        this.coach = coach;
     }
 }

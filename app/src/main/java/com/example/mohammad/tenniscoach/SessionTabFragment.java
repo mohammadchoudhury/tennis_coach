@@ -1,9 +1,9 @@
 package com.example.mohammad.tenniscoach;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class SessionTabFragment extends Fragment {
 
@@ -35,7 +31,7 @@ public class SessionTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_booking, container, false);
 
-        FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
+        final FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
 
         final List<Session> sessions = new ArrayList<>();
 
@@ -45,6 +41,11 @@ public class SessionTabFragment extends Fragment {
         sessionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 Toast.makeText(parent.getContext(), sessions.get(position).getID(), Toast.LENGTH_LONG).show();
+
+                String sessionId = sessions.get(position).getID();
+                Intent intent = new Intent(getContext(), ViewSessionActivity.class)
+                        .putExtra("sessionId", sessionId);
+                startActivity(intent);
             }
         });
 

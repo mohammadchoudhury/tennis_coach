@@ -1,5 +1,7 @@
 package com.example.mohammad.tenniscoach.model;
 
+import com.google.firebase.firestore.DocumentReference;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +12,7 @@ public class Session {
     private String ID;
     private String type;
     private Date date;
+    private double price;
 
     public Session() {
     }
@@ -27,7 +30,7 @@ public class Session {
     }
 
     public String getDateString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
+        SimpleDateFormat sdf = new SimpleDateFormat("E, d MMM yyyy", Locale.UK);
         return sdf.format(date);
     }
 
@@ -57,6 +60,14 @@ public class Session {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
 }
