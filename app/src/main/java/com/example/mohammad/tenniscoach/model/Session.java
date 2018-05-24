@@ -1,7 +1,5 @@
 package com.example.mohammad.tenniscoach.model;
 
-import com.google.firebase.firestore.DocumentReference;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -64,6 +62,10 @@ public class Session {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getPriceString() {
+        return "£" + String.format(Locale.UK, "%1.2f", price);
     }
 
     public void setPrice(double price) {
