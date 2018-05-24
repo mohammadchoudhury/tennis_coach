@@ -3,13 +3,9 @@ package com.example.mohammad.tenniscoach;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,11 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mohammad.tenniscoach.model.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -86,8 +79,14 @@ public class MainActivity extends AppCompatActivity
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     User user = documentSnapshot.toObject(User.class);
-                    ((TextView) findViewById(R.id.nav_tv_name)).setText(user.getName());
-                    ((TextView) findViewById(R.id.nav_tv_email)).setText(user.getEmail());
+                    TextView navName = (TextView) findViewById(R.id.nav_tv_name);
+                    if (navName != null) {
+                        navName.setText(user.getName());
+                    }
+                    TextView navEmail = (TextView) findViewById(R.id.nav_tv_email);
+                    if (navEmail != null) {
+                        navEmail.setText(user.getEmail());
+                    }
                 }
             }
         });
