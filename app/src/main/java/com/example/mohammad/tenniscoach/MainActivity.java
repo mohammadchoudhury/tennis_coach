@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_home);
         navigationView.setNavigationItemSelectedListener(this);
         Menu navMenu = navigationView.getMenu();
-        navMenu.findItem(R.id.nav_chat).setEnabled(false);
         navMenu.findItem(R.id.nav_settings).setEnabled(false);
         navMenu.findItem(R.id.nav_account).setEnabled(false);
 
@@ -128,6 +127,9 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case R.id.nav_chat:
+                if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof ChatFragment)) {
+                    fragment = new ChatFragment();
+                }
                 break;
             case R.id.nav_account:
                 break;

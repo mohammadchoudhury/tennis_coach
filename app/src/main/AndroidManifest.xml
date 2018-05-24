@@ -33,20 +33,20 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="userPortrait" />
 
-        <service
-            android:name=".fcm.FirebaseCloudMessagingService">
+        <service android:name=".fcm.FirebaseCloudMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".fcm.FirebaseAppInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".fcm.FirebaseAppInstanceIdService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-
+        <activity
+            android:name=".ChatActivity"
+            android:screenOrientation="userPortrait" />
     </application>
 
 </manifest>
