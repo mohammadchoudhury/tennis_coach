@@ -24,9 +24,14 @@
             android:name=".SessionActivity"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="userPortrait" />
-        <activity android:name=".ViewSessionActivity"
+        <activity
+            android:name=".ViewSessionActivity"
             android:parentActivityName=".SessionActivity"
-            android:screenOrientation="userPortrait"></activity>
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".ViewBookingActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="userPortrait" />
     </application>
 
 </manifest>

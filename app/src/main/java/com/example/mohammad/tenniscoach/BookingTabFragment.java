@@ -1,6 +1,7 @@
 package com.example.mohammad.tenniscoach;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -55,7 +56,9 @@ public class BookingTabFragment extends Fragment {
         bookingsListView.setAdapter(bookingsAdapter);
         bookingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                Toast.makeText(parent.getContext(), bookings.get(position).getID(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(), ViewBookingActivity.class);
+                intent.putExtra("bookingId", bookings.get(position).getID());
+                startActivity(intent);
             }
         });
 
