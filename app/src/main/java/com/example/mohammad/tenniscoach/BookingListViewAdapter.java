@@ -59,7 +59,7 @@ public class BookingListViewAdapter extends BaseAdapter {
         ((TextView) listItemView.findViewById(R.id.tv_item_date)).setText(session.getDateString());
         ((TextView) listItemView.findViewById(R.id.tv_item_time)).setText(session.getTimeString());
         if (session instanceof Booking) {
-            ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText(((Booking) session).getLocation());
+            ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText(((Booking) session).getCourt());
         } else {
             ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText("Court 5");
         }
