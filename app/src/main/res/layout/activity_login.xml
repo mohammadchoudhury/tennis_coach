@@ -47,7 +47,7 @@
                     android:inputType="textEmailAddress"
                     android:paddingLeft="@dimen/drawable_horizontal_padding"
                     android:paddingRight="@dimen/drawable_horizontal_padding"
-                    android:text="tennistitansfairlop@gmail.com"
+                    android:text="energytennisfairlop@gmail.com"
                     android:enabled="false" />
             </android.support.design.widget.TextInputLayout>
 
