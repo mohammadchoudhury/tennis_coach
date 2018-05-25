@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,8 +134,13 @@ public class ViewChatFragment extends Fragment {
                 imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
                 fromRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot snapshot) {
-                        sendMessage((String) snapshot.get("token"), message, (String) snapshot.get("name"));
+                    public void onSuccess(final DocumentSnapshot snapshot) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendMessage((String) snapshot.get("token"), message, (String) snapshot.get("name"), snapshot.getId());
+                            }
+                        }).start();
                     }
                 });
             }
@@ -144,7 +150,7 @@ public class ViewChatFragment extends Fragment {
     }
 
 
-    private void sendMessage(String token, String message, String from) {
+    private void sendMessage(String token, String message, String from, String fromId) {
         try {
             URL url = new URL("https://fcm.googleapis.com/fcm/send"); //in the real code, there is an ip and a port
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -154,20 +160,24 @@ public class ViewChatFragment extends Fragment {
             conn.connect();
 
             JSONObject dataJSON = new JSONObject();
-            dataJSON.put("body", "Date Body");
-            dataJSON.put("title", "Data Title");
-            dataJSON.put("message", "Date Message");
-            dataJSON.put("priority", "high");
+            dataJSON.put("title", "Message from " + from);
+            dataJSON.put("message", message);
+            dataJSON.put("fromId", message);
 
             JSONObject messageJSON = new JSONObject();
             messageJSON.put("to", token);
             messageJSON.put("data", dataJSON);
+            messageJSON.put("priority", "high");
 
             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
             os.writeBytes(messageJSON.toString());
 
             os.flush();
             os.close();
+
+            Log.d("Message:", conn.getResponseMessage());
+            Log.d("Message:", messageJSON.toString());
+
             conn.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
