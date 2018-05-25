@@ -2,6 +2,7 @@ package com.example.mohammad.tenniscoach;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,7 +52,7 @@ public class ViewChatFragment extends Fragment {
     public ViewChatFragment() {
     }
 
-    static DocumentReference userRef;
+    DocumentReference userRef;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -162,7 +163,7 @@ public class ViewChatFragment extends Fragment {
             JSONObject dataJSON = new JSONObject();
             dataJSON.put("title", "Message from " + from);
             dataJSON.put("message", message);
-            dataJSON.put("fromId", message);
+            dataJSON.put("fromId", fromId);
 
             JSONObject messageJSON = new JSONObject();
             messageJSON.put("to", token);
