@@ -151,7 +151,7 @@ public class ViewChatFragment extends Fragment {
     }
 
 
-    private void sendMessage(String token, String message, String from, String fromId) {
+    public static void sendMessage(String token, String message, String from, String fromId) {
         try {
             URL url = new URL("https://fcm.googleapis.com/fcm/send"); //in the real code, there is an ip and a port
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
