@@ -47,6 +47,11 @@
         <activity
             android:name=".ChatActivity"
             android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".ProfileActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="userPortrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

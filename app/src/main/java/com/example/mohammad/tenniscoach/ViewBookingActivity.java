@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ public class ViewBookingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_session);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         final String bookingId = intent.getStringExtra("bookingId");
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -69,8 +70,17 @@ public class ViewBookingActivity extends AppCompatActivity {
 
                 booking[0].getUser().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot snapshot) {
-                        findViewById(R.id.ll_user).setVisibility(View.VISIBLE);
+                    public void onSuccess(final DocumentSnapshot snapshot) {
+                        LinearLayout llUser = findViewById(R.id.ll_user);
+                        llUser.setVisibility(View.VISIBLE);
+                        llUser.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(ViewBookingActivity.this, ProfileActivity.class);
+                                i.putExtra("userId", snapshot.getId());
+                                startActivity(i);
+                            }
+                        });
                         ((TextView)findViewById(R.id.tv_name)).setText((String)snapshot.get("name"));
                     }
                 });
