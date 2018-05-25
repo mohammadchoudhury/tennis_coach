@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mohammad.tenniscoach.model.Message;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,15 +39,21 @@ public class ChatFragment extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
-
         final List<Message> chat = new ArrayList<>();
-
         final ChatListViewAdapter chatsAdapter = new ChatListViewAdapter(chat);
         ListView chatsListView = (ListView) rootView.findViewById(R.id.lv_chats);
         chatsListView.setAdapter(chatsAdapter);
         chatsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                Toast.makeText(getActivity(), ((Message) parent.getItemAtPosition(position)).getFrom().getId(), Toast.LENGTH_SHORT).show();
+                Bundle extras = new Bundle();
+                extras.putString("userId", ((Message) parent.getItemAtPosition(position)).getFrom().getId());
+                Fragment frag = new ViewChatFragment();
+                frag.setArguments(extras);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, frag)
+                        .addToBackStack(null)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
             }
         });
 
@@ -101,11 +107,10 @@ public class ChatFragment extends Fragment {
         @Override
         public View getView(int position, View listItemView, ViewGroup parent) {
             if (listItemView == null) {
-                listItemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chat, parent, false);
+                listItemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_contact, parent, false);
             }
             Message message = chat.get(position);
             final View finalListItemView = listItemView;
-            String from = "";
             message.getFrom().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(final DocumentSnapshot snapshot) {
