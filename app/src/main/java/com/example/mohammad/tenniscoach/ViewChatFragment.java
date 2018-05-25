@@ -28,6 +28,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -53,7 +58,7 @@ public class ViewChatFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_view_chat, container, false);
 
         Bundle extras = getArguments();
-        String fromId = extras.getString("userId");
+        String fromId = extras.getString("fromId");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
@@ -113,7 +118,7 @@ public class ViewChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 EditText etMessage = ((EditText) rootView.findViewById(R.id.et_message));
-                String message = etMessage.getText().toString().trim();
+                final String message = etMessage.getText().toString().trim();
                 if (!message.equals("")) {
                     CollectionReference messagesRef = fsdb.collection("messages/");
                     Map<String, Object> messageMap = new HashMap<>();
@@ -126,11 +131,49 @@ public class ViewChatFragment extends Fragment {
                 etMessage.setText("");
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+                fromRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot snapshot) {
+                        sendMessage((String) snapshot.get("token"), message, (String) snapshot.get("name"));
+                    }
+                });
             }
         });
 
         return rootView;
     }
+
+
+    private void sendMessage(String token, String message, String from) {
+        try {
+            URL url = new URL("https://fcm.googleapis.com/fcm/send"); //in the real code, there is an ip and a port
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Authorization", "key=AIzaSyCiVN0XUC4U61fh8mRAsXYOEDvMsfQQcOY");
+            conn.connect();
+
+            JSONObject dataJSON = new JSONObject();
+            dataJSON.put("body", "Date Body");
+            dataJSON.put("title", "Data Title");
+            dataJSON.put("message", "Date Message");
+            dataJSON.put("priority", "high");
+
+            JSONObject messageJSON = new JSONObject();
+            messageJSON.put("to", token);
+            messageJSON.put("data", dataJSON);
+
+            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+            os.writeBytes(messageJSON.toString());
+
+            os.flush();
+            os.close();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void updateMessages(ArrayList<Message> messages, MessageListViewAdapter messagesAdapter) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

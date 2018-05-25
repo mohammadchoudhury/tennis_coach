@@ -46,7 +46,7 @@ public class ChatFragment extends Fragment {
         chatsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 Bundle extras = new Bundle();
-                extras.putString("userId", ((Message) parent.getItemAtPosition(position)).getFrom().getId());
+                extras.putString("fromId", ((Message) parent.getItemAtPosition(position)).getFrom().getId());
                 Fragment frag = new ViewChatFragment();
                 frag.setArguments(extras);
                 getActivity().getSupportFragmentManager().beginTransaction()
