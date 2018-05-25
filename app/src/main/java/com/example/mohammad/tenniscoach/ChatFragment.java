@@ -127,6 +127,14 @@ public class ChatFragment extends Fragment {
                             startActivity(new Intent(Intent.ACTION_SENDTO).setData(Uri.parse("mailto:" + (String) snapshot.get("email") + "?subject=Message from Energy Tennis Club&body=Hi " + (String) snapshot.get("name") + ",")));
                         }
                     });
+                    finalListItemView.findViewById(R.id.iv_profile_pic).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getContext(), ProfileActivity.class);
+                            i.putExtra("userId", snapshot.getId());
+                            startActivity(i);
+                        }
+                    });
                 }
             });
             ((TextView) listItemView.findViewById(R.id.tv_item_message)).setText(message.getMessage());
